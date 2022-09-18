@@ -64,7 +64,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full bg-dark-blue">
-        <header className="flex justify-between items-center absolute top-0 left-0 right-0 border border-white z-10 pt-8 px-6 lg:pl-12 lg:pr-16">
+        <header className="flex justify-between items-center absolute top-0 left-0 right-0 z-10 pt-8 px-6 lg:pl-12 lg:pr-16">
           {/* 
             TODO:
             LOGO ideas:

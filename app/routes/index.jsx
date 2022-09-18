@@ -1,11 +1,13 @@
 // import { Response } from "@remix-run/node";
 import { Form, Link, useActionData, useCatch, useFetcher, useTransition } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
+import { motion, useInView } from "framer-motion";
 import Heading from "~/components/Heading";
 import { ArrowLeftIcon, Facebook, Twitter } from "~/components/Icon";
 import ProjectCard from "~/components/ProjectCard";
 
 import { addContactToList, badRequest, createContact, sendEmail, useOptionalUser, validateEmail, validateMessage, validateName } from "~/utils";
+import { useRef } from "react";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -95,19 +97,33 @@ function Hero() {
     <section className="w-full min-h-screen relative">
       <div className="w-80 h-80 absolute -left-60 lg:-left-44 top-20 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
       <div className="w-full grid items-start lg:place-items-center py-10 lg:py-auto">
-        <div className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 lg:mt-8 pt-44 px-6 lg:px-10  border border-red-500">
+        <motion.div
+          className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 lg:mt-8 pt-44 px-6 lg:px-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
           <div>
             {/* Text */}
-            <h2 className="font-heading font-bold text-white text-2xl lg:text-5xl">Hi, I'm Brian Mwangi. I build websites that <span className="text-brand-orange">work</span></h2>
-            <p className="text-body-white mt-3 lg:text-lg">Do you desire to have the <span className="text-brand-orange">best</span> website you can possibly have?</p>
+            <h2 className="font-heading font-bold text-white text-2xl lg:text-5xl">Hi, I'm Brian Mwangi. I build websites that <span className="text-brand-orange"><em>actually work</em></span></h2>
+            <p className="text-body-white mt-3 lg:text-lg">Do you desire to have the <span className="text-brand-orange"><em>best</em></span> website you can possibly have?</p>
             <div className="mt-5 flex gap-6 items-center">
               <Link to="/#contact" className="px-8 py-3 bg-white text-black hover:bg-brand-orange transition duration-300 ease-in-out rounded-lg">Contact me</Link>
               <Link to="/#projects" className="text-body-white hover:text-brand-orange transition duration-300 ease-in-out underline">View projects</Link>
             </div>
-            <div className="w-9 h-9 mt-4 -ml-2">
-              <img
+            <div className="w-9 h-9 mt-2 -ml-2">
+              <motion.img
                 src="/contact-arrow.svg"
                 alt=""
+                // initial={{ x: 0, y: 0 }}
+                // animate={{ x: -10, y: -10 }}
+                // initial={{ y: 0 }}
+                animate={{ x: -6, y: 6 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                }}
               />
             </div>
           </div>
@@ -117,7 +133,7 @@ function Hero() {
               <img src="/hero.svg" alt="" />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
       <div className="w-56 h-56 lg:w-80 lg:h-80 absolute -bottom-10 lg:-bottom-40 left-20 lg:left-1/3 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
     </section>
@@ -126,7 +142,7 @@ function Hero() {
 
 function About() {
   return (
-    <section className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 lg:mt-10" id="about">
+    <section className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-5 lg:mt-10" id="about">
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-36 items-center py-5 lg:py-10">
         <div className="pl-5 lg:pl-12 pt-6">
           <Heading text='About me' />
@@ -140,13 +156,20 @@ function About() {
           <p className="text-body-white lg:text-lg  mt-2">I graduated with a Bachelor's degree in Computer Science from Jomo Kenyatta University of Agriculture and Technology.</p>
         </div>
         <div className="justify-self-center">
-          <div className="aspect-w-4 aspect-h-3 w-40 lg:w-72 border border-[#c31432] rounded-lg">
-            <img
+          <div className="aspect-w-4 aspect-h-3 w-40 lg:w-72  rounded-lg">
+            <motion.img
               src="/brian.jpg"
               alt="A picture of Brian Mwangi"
               width="100%"
               height="100%"
-              className="object-cover rounded-lg rotate-3"
+              className="object-cover rounded-lg"
+              whileInView={{
+                rotateZ: 5
+              }}
+              transition={{
+                duration: 1
+              }}
+              viewport={{ once: true }}
             />
           </div>
         </div>
@@ -156,9 +179,23 @@ function About() {
 }
 
 function Projects() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 })
   return (
-    <section className="w-4/5 mx-auto" id="projects">
-      <div className="grid justify-center pt-20 lg:pt-24">
+    <section className="w-4/5 mx-auto" id="projects" ref={ref}>
+      <div
+        className="grid justify-center pt-20 lg:pt-24"
+        // initial={{ opacity: 0 }}
+        // whileInView={{ opacity: 1, y: 0 }}
+        // viewport={{ once: true }}
+        // transition={{ duration: 1.5 }}
+        style={{
+          opacity: isInView ? 1 : 0,
+          y: isInView ? 0 : 20,
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+        }}
+
+      >
         <Heading text='Wondering what I could do?' />
         <p className="text-body-white lg:text-center lg:text-lg mt-2 lg:mt-4">Here are some of my projects:</p>
         {/* TODO:
@@ -198,7 +235,14 @@ function ContactForm() {
 
   // TODO: Display phone no and email insted of contact form?? Maybe..not sure
   return (
-    <section className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-24" id="contact">
+    <motion.section
+      className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-24"
+      id="contact"
+      initial={{ y: 20, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1 }}
+      viewport={{ once: true }}
+    >
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-5 px-5 lg:px-8 py-10">
         <div className="lg:self-center">
           {/* Text */}
@@ -207,15 +251,22 @@ function ContactForm() {
             I'd like to hear from you
           </p>
           <div className="flex gap-5 items-end py-2">
-            <div className="w-7 h-7 lg:w-8 lg:h-8">
+            <motion.div
+              className="w-7 h-7 lg:w-8 lg:h-8"
+              whileInView={{ rotateZ: 5 }}
+              transition={{ delay: 1, duration: 0.3, repeat: 3, repeatType: 'reverse' }}
+
+              viewport={{ once: true }}
+            >
               <img
                 src="/phone.svg"
                 alt="Mobile phone handcraft"
                 width="100%"
                 height="100%"
                 className="-rotate-12"
+
               />
-            </div>
+            </motion.div>
             <span className="font-heading font-bold text-body-white">0710 162 152</span>
           </div>
         </div>
@@ -284,7 +335,7 @@ function ContactForm() {
           </Form>
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
@@ -296,7 +347,13 @@ function Footer() {
   return (
     <footer className="relative">
       <div className="w-36 h-36 lg:w-44 lg:h-44 absolute -left-20 lg:-left-36 top-10 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
-      <div className="w-4/5 mx-auto mt-16">
+      <motion.div
+        className="w-4/5 mx-auto mt-16"
+        initial={{ y: 20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
+      >
         <div className="flex justify-between">
           <h2 className="font-heading text-white uppercase">Brian Mwangi</h2>
           <div className="flex gap-3">
@@ -343,7 +400,7 @@ function Footer() {
             </fetcher.Form>
           </div>
         </div>
-      </div>
+      </motion.div>
       <div className="w-full bg-[#533D55] text-body-white font-body flex justify-center mt-10 py-3">
         Copyright &copy; {new Date().getFullYear()}
       </div>

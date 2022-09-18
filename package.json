@@ -35,7 +35,7 @@
     "@remix-run/serve": "^1.7.0",
     "@remix-run/server-runtime": "^1.7.0",
     "bcryptjs": "^2.4.3",
-    "framer-motion": "^7.2.1",
+    "framer-motion": "^7.3.5",
     "isbot": "^3.5.1",
     "node-mailjet": "^5.1.1",
     "react": "^18.2.0",
