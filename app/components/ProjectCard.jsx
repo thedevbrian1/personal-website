@@ -10,7 +10,7 @@ export default function ProjectCard({ imageUrl, alt, title, projectUrl }) {
                         alt={alt}
                         height="100%"
                         width="100%"
-                        className="rounded-xl"
+                        className="rounded-xl object-cover"
                     />
                 </div>
                 <div className="grid gap-2 mb-1">

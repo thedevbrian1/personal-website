@@ -15,5 +15,18 @@ module.exports = {
       'body': ['"Source Sans 3"', 'sans-serif']
     }
   },
-  plugins: [],
+  // variants: {
+  //   extend: {
+  //     invert: ["hover"],
+  //     sepia: ["hover"],
+  //     hueRotate: ["hover"],
+  //     saturate: ["hover"],
+  //     brightness: ["hover"]
+  //   },
+  // },
+  plugins: [
+    require('tailwindcss-neumorphism'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };

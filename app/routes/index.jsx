@@ -1,13 +1,17 @@
 // import { Response } from "@remix-run/node";
 import { Form, Link, useActionData, useCatch, useFetcher, useTransition } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
+import { useRef, useLayoutEffect, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { motion, useInView } from "framer-motion";
 import Heading from "~/components/Heading";
 import { ArrowLeftIcon, Facebook, Twitter } from "~/components/Icon";
 import ProjectCard from "~/components/ProjectCard";
+import Input from "~/components/Input";
 
 import { addContactToList, badRequest, createContact, sendEmail, useOptionalUser, validateEmail, validateMessage, validateName } from "~/utils";
-import { useRef } from "react";
+
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -73,7 +77,9 @@ export async function action({ request }) {
   }
   return null;
 }
-
+// TODO: Use max-width instead of percentage for section widths?? (Maybe)
+// TODO: Responsive design (esp tab and landscape mode)
+// TODO: Fix the flash on the initial page load (probably due to SSR)
 export default function Index() {
   const user = useOptionalUser();
   return (
@@ -93,47 +99,74 @@ export default function Index() {
 }
 
 function Hero() {
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from("#hero", {
+        opacity: 0,
+        duration: 2,
+        // immediateRender: false,
+      });
+      gsap.fromTo("#arrow", {
+        x: '-6',
+        y: 6,
+      },
+        {
+          x: 2,
+          y: 0,
+          duration: 1.5,
+          yoyo: true,
+          repeat: Infinity
+        })
+    }, heroRef);
+
+    return () => {
+      ctx.revert();
+    }
+  }, []);
+
   return (
-    <section className="w-full min-h-screen relative">
+    <section ref={heroRef} className="w-full min-h-screen relative">
       <div className="w-80 h-80 absolute -left-60 lg:-left-44 top-20 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
-      <div className="w-full grid items-start lg:place-items-center py-10 lg:py-auto">
-        <motion.div
+      <div className="w-full xl:max-w-7xl mx-auto grid items-start lg:place-items-center py-10 lg:py-auto">
+        <div
+          id="hero"
           className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 lg:mt-8 pt-44 px-6 lg:px-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+
         >
           <div>
             {/* Text */}
-            <h2 className="font-heading font-bold text-white text-2xl lg:text-5xl">Hi, I'm Brian Mwangi. I build websites that <span className="text-brand-orange"><em>actually work</em></span></h2>
-            <p className="text-body-white mt-3 lg:text-lg">Do you desire to have the <span className="text-brand-orange"><em>best</em></span> website you can possibly have?</p>
+            <h2 className="font-heading font-bold text-white text-2xl lg:text-5xl">Hi, I'm Brian Mwangi. I build websites that <span className="bg-gradient-to-r from-[#ff9966] to-[#ff5e62] text-transparent bg-clip-text"><em>actually work</em></span></h2>
+            <p className="text-body-white mt-3 lg:text-lg">Do you desire to have the <span className="bg-gradient-to-r from-[#ff9966] to-[#ff5e62] text-transparent bg-clip-text"><em>best</em></span> website you can possibly have?</p>
             <div className="mt-5 flex gap-6 items-center">
               <Link to="/#contact" className="px-8 py-3 bg-white text-black hover:bg-brand-orange transition duration-300 ease-in-out rounded-lg">Contact me</Link>
               <Link to="/#projects" className="text-body-white hover:text-brand-orange transition duration-300 ease-in-out underline">View projects</Link>
             </div>
             <div className="w-9 h-9 mt-2 -ml-2">
-              <motion.img
+              <img
+                id="arrow"
                 src="/contact-arrow.svg"
                 alt=""
-                // initial={{ x: 0, y: 0 }}
-                // animate={{ x: -10, y: -10 }}
-                // initial={{ y: 0 }}
-                animate={{ x: -6, y: 6 }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: 'reverse',
-                }}
+              // initial={{ x: 0, y: 0 }}
+              // animate={{ x: -10, y: -10 }}
+              // initial={{ y: 0 }}
+              // animate={{ x: -6, y: 6 }}
+              // transition={{
+              //   duration: 1.5,
+              //   repeat: Infinity,
+              //   repeatType: 'reverse',
+              // }}
               />
             </div>
           </div>
           <div>
             {/* Image */}
-            <div className="aspect-h-3 aspect-w-2 md:aspect-w-4 md:aspect-h-3">
-              <img src="/hero.svg" alt="" />
+            <div className="">
+              <img src="/hero.svg" alt="" className="object-cover w-full" />
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
       <div className="w-56 h-56 lg:w-80 lg:h-80 absolute -bottom-10 lg:-bottom-40 left-20 lg:left-1/3 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
     </section>
@@ -141,9 +174,32 @@ function Hero() {
 }
 
 function About() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const aboutRef = useRef(null);
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from("#rect", {
+        xPercent: 100,
+        ease: 'expo',
+        opacity: 0,
+        duration: 2,
+        delay: 1,
+        scrollTrigger: {
+          trigger: '#rect',
+          // start: "30%"
+        }
+        // immediateRender: false,
+      });
+    }, aboutRef)
+    return () => {
+      ctx.revert();
+    }
+  }, []);
+
   return (
-    <section className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-5 lg:mt-10" id="about">
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-36 items-center py-5 lg:py-10">
+    <section className="w-4/5 xl:max-w-6xl mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-5 lg:mt-10" id="about">
+      <div ref={aboutRef} className="grid lg:grid-cols-2 gap-8 lg:gap-36 items-center py-5 lg:py-10">
         <div className="pl-5 lg:pl-12 pt-6">
           <Heading text='About me' />
           <p className="text-body-white lg:text-lg mt-2 lg:mt-4">
@@ -156,21 +212,20 @@ function About() {
           <p className="text-body-white lg:text-lg  mt-2">I graduated with a Bachelor's degree in Computer Science from Jomo Kenyatta University of Agriculture and Technology.</p>
         </div>
         <div className="justify-self-center">
-          <div className="aspect-w-4 aspect-h-3 w-40 lg:w-72  rounded-lg">
-            <motion.img
-              src="/brian.jpg"
-              alt="A picture of Brian Mwangi"
-              width="100%"
-              height="100%"
-              className="object-cover rounded-lg"
-              whileInView={{
-                rotateZ: 5
-              }}
-              transition={{
-                duration: 1
-              }}
-              viewport={{ once: true }}
-            />
+          <div className=" w-40 lg:w-72 xl:w-80  rounded-lg">
+            <svg viewBox="0 0 100 100" className="">
+              <mask id="myMask">
+                <rect
+                  id="rect"
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  fill="white"
+                />
+              </mask>
+              <image mask="url(#myMask)" x="0" y="0" width="100%" height="100%" href="/brian.jpg" />
+            </svg>
           </div>
         </div>
       </div>
@@ -179,21 +234,32 @@ function About() {
 }
 
 function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  gsap.registerPlugin(ScrollTrigger);
+  const projectsRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from("#projectsDiv", {
+        opacity: 0,
+        y: 20,
+        duration: 1,
+        scrollTrigger: "#projectsDiv"
+      })
+    }, projectsRef);
+    return () => {
+      ctx.revert();
+    }
+  }, []);
   return (
-    <section className="w-4/5 mx-auto" id="projects" ref={ref}>
+    <section className="w-4/5 xl:max-w-5xl mx-auto" id="projects" ref={projectsRef}>
       <div
+        id="projectsDiv"
         className="grid justify-center pt-20 lg:pt-24"
-        // initial={{ opacity: 0 }}
-        // whileInView={{ opacity: 1, y: 0 }}
-        // viewport={{ once: true }}
-        // transition={{ duration: 1.5 }}
-        style={{
-          opacity: isInView ? 1 : 0,
-          y: isInView ? 0 : 20,
-          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
-        }}
+      // style={{
+      //   opacity: isInView ? 1 : 0,
+      //   y: isInView ? 0 : 20,
+      //   transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+      // }}
 
       >
         <Heading text='Wondering what I could do?' />
@@ -230,20 +296,41 @@ function Projects() {
 }
 
 function ContactForm() {
-  const actionData = useActionData();
-  const transition = useTransition();
+  // const actionData = useActionData();
+  // const transition = useTransition();
+  const fetcher = useFetcher();
+  gsap.registerPlugin(ScrollTrigger);
 
-  // TODO: Display phone no and email insted of contact form?? Maybe..not sure
+  const contactRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from("#contactDiv", {
+        opacity: 0,
+        y: 20,
+        duration: 1,
+        scrollTrigger: "#contactDiv",
+      });
+      gsap.to("#mobile", {
+        rotateZ: 5,
+        repeat: 3,
+        yoyo: true,
+        duration: 0.3,
+        delay: 2,
+        scrollTrigger: "#mobile"
+      });
+    }, contactRef);
+    return () => {
+      ctx.revert();
+    }
+  }, []);
   return (
-    <motion.section
-      className="w-4/5 mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-24"
+    <section
+      className="w-4/5 xl:max-w-5xl mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-24"
+      ref={contactRef}
       id="contact"
-      initial={{ y: 20, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1 }}
-      viewport={{ once: true }}
     >
-      <div className="grid lg:grid-cols-2 gap-10 lg:gap-5 px-5 lg:px-8 py-10">
+      <div id="contactDiv" className="grid lg:grid-cols-2 gap-10 lg:gap-5 px-5 lg:px-8 py-10">
         <div className="lg:self-center">
           {/* Text */}
           <Heading text="Get in touch with me" />
@@ -251,12 +338,9 @@ function ContactForm() {
             I'd like to hear from you
           </p>
           <div className="flex gap-5 items-end py-2">
-            <motion.div
+            <div
+              id="mobile"
               className="w-7 h-7 lg:w-8 lg:h-8"
-              whileInView={{ rotateZ: 5 }}
-              transition={{ delay: 1, duration: 0.3, repeat: 3, repeatType: 'reverse' }}
-
-              viewport={{ once: true }}
             >
               <img
                 src="/phone.svg"
@@ -266,49 +350,61 @@ function ContactForm() {
                 className="-rotate-12"
 
               />
-            </motion.div>
+            </div>
             <span className="font-heading font-bold text-body-white">0710 162 152</span>
           </div>
         </div>
         <div className="lg:px-2">
           {/* Form */}
-          <Form method="post">
+          <fetcher.Form method="post">
             <fieldset className="grid gap-3">
               <div>
                 <label htmlFor="name" className="text-body-white">
                   Name
-                  {actionData?.fieldErrors
-                    ? (<span className="text-red-500 ml-2">{actionData?.fieldErrors?.name}</span>)
+                  {fetcher.data?.fieldErrors
+                    ? (<span className="text-red-500 ml-2">{fetcher.data?.fieldErrors?.name}</span>)
                     : <>&nbsp;</>
                   }
                 </label>
-                <input
+                {/* <input
                   type="text"
                   name="name"
                   id="name"
                   className="border border-brand-orange rounded-lg w-full p-2 text-body-white bg-transparent"
+                /> */}
+                <Input
+                  type='text'
+                  name='name'
+                  id='name'
+                  placeholder='John Doe'
                 />
               </div>
               <div>
                 <label htmlFor="email" className="text-body-white">
                   Email
-                  {(actionData?.fieldErrors && actionData?.fields)
-                    ? (<span className="text-red-500 ml-2">{actionData?.fieldErrors?.email}</span>)
+                  {fetcher.data?.fieldErrors
+                    ? (<span className="text-red-500 ml-2">{fetcher.data?.fieldErrors?.email}</span>)
                     : <>&nbsp;</>
                   }
                 </label>
-                <input
+                {/* <input
                   type="email"
                   name="email"
                   id="email"
                   className="border border-brand-orange rounded-lg w-full p-2 text-body-white bg-transparent"
+                /> */}
+                <Input
+                  type='email'
+                  name='email'
+                  id='email'
+                  placeholder='johndoe@gmail.com'
                 />
               </div>
               <div>
                 <label htmlFor="message" className="text-body-white">
                   Message
-                  {actionData?.fieldErrors
-                    ? (<span className="text-red-500 ml-2">{actionData?.fieldErrors?.message}</span>)
+                  {fetcher.data?.fieldErrors
+                    ? (<span className="text-red-500 ml-2">{fetcher.data?.fieldErrors?.message}</span>)
                     : <>&nbsp;</>
                   }
                 </label>
@@ -317,42 +413,64 @@ function ContactForm() {
                   id="message"
                   // cols="30" 
                   rows="4"
-                  className="w-full border border-brand-orange bg-transparent rounded-lg p-2 text-body-white"
+                  className="w-full xl:max-w-sm bg-transparent rounded-lg block text-body-white"
                 />
               </div>
+
+              {/* <div className="relative max-w-sm group ">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#f12711] to-[#f5af19] group-hover:bg-gradient-to-r group-hover:from-[#f5af19] group-hover:to-[#f12711] transition ease-in-out duration-5000 blur opacity-75 rounded-lg" />
+
+              </div> */}
               <button
                 type="submit"
                 name="_action"
                 value="contact"
-                className="bg-brand-orange w-full py-2 px-auto rounded-lg font-bold lg:text-lg"
-              >
-                {transition.submission && transition.submission.formData.get('_action') == 'contact'
+                className=" bg-gradient-to-r from-[#c94b4b] to-[#4b134f] hover:bg-gradient-to-r hover:from-[#4b134f] hover:to-[#c94b4b] transition ease-in-out duration-200 w-full xl:max-w-sm py-3 px-auto  rounded-lg font-bold lg:text-lg text-white group">
+                {(fetcher.submission)
                   ? 'Submitting...'
                   : 'Submit'
                 }
               </button>
             </fieldset>
-          </Form>
+          </fetcher.Form>
         </div>
       </div>
-    </motion.section>
+    </section>
   )
 }
 
 function Footer() {
   const actionData = useActionData();
-  const transition = useTransition();
+  // const transition = useTransition();
   const fetcher = useFetcher();
+  gsap.registerPlugin(ScrollTrigger);
+
+  const footerRef = useRef(null);
+
+  // function handleHover() {
+  //   gsap.to("#subscribeBtn", {
+  //     backgroundColor: '#c94b4b'
+  //   });
+  // }
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from("#footer", {
+        opacity: 0,
+        y: 20,
+        duration: 1,
+        scrollTrigger: "#footer"
+      });
+    }, footerRef);
+    return ctx.revert();
+  }, []);
 
   return (
-    <footer className="relative">
+    <footer ref={footerRef} className="relative">
       <div className="w-36 h-36 lg:w-44 lg:h-44 absolute -left-20 lg:-left-36 top-10 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
-      <motion.div
-        className="w-4/5 mx-auto mt-16"
-        initial={{ y: 20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
+      <div
+        id="footer"
+        className="w-4/5 xl:max-w-5xl mx-auto mt-16"
       >
         <div className="flex justify-between">
           <h2 className="font-heading text-white uppercase">Brian Mwangi</h2>
@@ -363,7 +481,7 @@ function Footer() {
             <Facebook fillColor='#ffffff' hoverColor='#F38016' />
           </div>
         </div>
-        <div className="bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-10 px-5 py-10 grid lg:grid-cols-2 gap-5">
+        <div className="bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-10 px-5 xl:px-8 py-10 grid lg:grid-cols-2 gap-5">
           <div className="lg:self-center">
             <h2 className="text-white font-heading font-bold text-xl lg:text-3xl">Sign up for the newsletter</h2>
             <p className="font-body text-body-white lg:text-lg mt-2 lg:mt-4">Receive interesting tips and articles in real time. You can unsubscribe at any time.</p>
@@ -374,24 +492,53 @@ function Footer() {
                 <div>
                   <label htmlFor="subscribe" className="text-body-white">
                     Email
-                    {(fetcher.data?.fieldErrors && fetcher.data?.field)
-                      ? (<span className="text-red-500 ml-2">{actionData?.fieldErrors?.email}</span>)
+                    {(fetcher.data?.fieldErrors)
+                      ? (<span className="text-red-500 ml-2">{fetcher.data?.fieldErrors?.email}</span>)
                       : <>&nbsp;</>
                     }
                   </label>
-                  <input
+                  {/* <input
                     type="email"
                     name="email"
                     id="subscribe"
-                    className="w-full bg-transparent border border-brand-orange rounded-lg p-2 text-body-white"
+                    className="w-full xl:max-w-sm block bg-transparent border border-orange-300 rounded-lg p-2 text-body-white"
+                  /> */}
+                  {/* <input
+                    type="text"
+                    name="email"
+                    id="subscribe"
+                    placeholder="johndoe@gmail.com"
+                    className="nm-inset-slightly-lighter-dark-blue border-none outline-none w-full xl:max-w-sm block rounded-lg  text-body-white"
+                  /> */}
+                  <Input
+                    type='email'
+                    name='email'
+                    id='subscribe'
+                    placeholder='johndoe@gmail.com'
                   />
                 </div>
+                {/* <div className="relative max-w-sm group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#f12711] to-[#f5af19] group-hover:bg-gradient-to-r group-hover:from-[#f5af19] group-hover:to-[#f12711] transition ease-in-out duration-5000 blur opacity-75 rounded-lg" />
+
+                  <button
+                    type="submit"
+                    name="_action"
+                    value="subscribe"
+                    className="relative bg-dark-blue w-full py-2 px-auto rounded-lg font-bold lg:text-lg text-white">
+                    {(fetcher.submission)
+                      ? 'Subscribing...'
+                      : 'Subscribe'
+                    }
+                  </button>
+                </div> */}
                 <button
+                  id="subscribeBtn"
                   type="submit"
                   name="_action"
                   value="subscribe"
-                  className="bg-brand-orange w-full py-2 px-auto rounded-lg font-bold lg:text-lg">
-                  {(fetcher.submission && fetcher.submission.formData.get('_action') === 'subscribe')
+                  // onMouseEnter={handleHover}
+                  className=" bg-gradient-to-r from-[#c94b4b] to-[#4b134f] hover:bg-gradient-to-r hover:from-[#4b134f] hover:to-[#c94b4b] transition ease-in-out duration-200 w-full xl:max-w-sm py-3 px-auto  rounded-lg font-bold lg:text-lg text-white group">
+                  {(fetcher.submission)
                     ? 'Subscribing...'
                     : 'Subscribe'
                   }
@@ -400,7 +547,7 @@ function Footer() {
             </fetcher.Form>
           </div>
         </div>
-      </motion.div>
+      </div>
       <div className="w-full bg-[#533D55] text-body-white font-body flex justify-center mt-10 py-3">
         Copyright &copy; {new Date().getFullYear()}
       </div>

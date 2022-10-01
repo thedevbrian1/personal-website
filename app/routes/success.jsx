@@ -62,7 +62,7 @@ export default function Success() {
                         /> */}
                     </svg>
                 </motion.div>
-                <Link to="/" className="text-white underline flex justify-center gap-2 mt-2">
+                <Link to="/" className="text-white hover:text-blue-600 underline flex justify-center gap-2 mt-2">
                     <ArrowLeftIcon /> Back to home
                 </Link>
                 {/* <svg viewBox="0 0 50 50" className="border border-red-500">
