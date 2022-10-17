@@ -103,11 +103,11 @@ function Hero() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      gsap.from("#hero", {
-        opacity: 0,
-        duration: 2,
-        // immediateRender: false,
-      });
+      // gsap.from("#hero", {
+      //   opacity: 0,
+      //   duration: 2,
+      //   // immediateRender: false,
+      // });
       gsap.fromTo("#arrow", {
         x: '-6',
         y: 6,
@@ -130,9 +130,12 @@ function Hero() {
     <section ref={heroRef} className="w-full min-h-screen relative">
       <div className="w-80 h-80 absolute -left-60 lg:-left-44 top-20 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
       <div className="w-full xl:max-w-7xl mx-auto grid items-start lg:place-items-center py-10 lg:py-auto">
-        <div
+        <motion.div
           id="hero"
           className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 lg:mt-8 pt-44 px-6 lg:px-10"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1, transition: { duration: 2 } }}
+          viewport={{ once: true }}
 
         >
           <div>
@@ -166,7 +169,7 @@ function Hero() {
               <img src="/hero.svg" alt="" className="object-cover w-full" />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
       <div className="w-56 h-56 lg:w-80 lg:h-80 absolute -bottom-10 lg:-bottom-40 left-20 lg:left-1/3 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
     </section>
