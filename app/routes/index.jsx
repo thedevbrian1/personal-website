@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { motion, useInView } from "framer-motion";
 import Heading from "~/components/Heading";
-import { ArrowLeftIcon, Facebook, Twitter } from "~/components/Icon";
+import { ArrowLeftIcon, Facebook, LinkedIn, Twitter } from "~/components/Icon";
 import ProjectCard from "~/components/ProjectCard";
 import Input from "~/components/Input";
 
@@ -480,8 +480,15 @@ function Footer() {
           <div className="flex gap-3">
             {/* <img src="/twitter.svg" alt="Twitter icon" />
               <img src="/facebook.svg" alt="Facebook icon" /> */}
-            <Twitter />
-            <Facebook fillColor='#ffffff' hoverColor='#F38016' />
+            <a href="https://www.linkedin.com/in/brian-mwangi-9b01651a1/" target="_blank" >
+              <LinkedIn />
+            </a>
+            <a href="https://twitter.com/_3R14N_" target="_blank">
+              <Twitter />
+            </a>
+            <a href="https://www.facebook.com/brayo.notnice" target="_blank">
+              <Facebook />
+            </a>
           </div>
         </div>
         <div className="bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-10 px-5 xl:px-8 py-10 grid lg:grid-cols-2 gap-5">
