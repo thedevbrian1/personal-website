@@ -12,6 +12,11 @@ import Input from "~/components/Input";
 
 import { addContactToList, badRequest, createContact, sendEmail, useOptionalUser, validateEmail, validateMessage, validateName } from "~/utils";
 
+export function headers() {
+  return {
+    "Cache-Control": "max-age=3600, s-maxage=86400"
+  };
+}
 
 export async function action({ request }) {
   const formData = await request.formData();
