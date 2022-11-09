@@ -291,10 +291,10 @@ function Projects() {
 
           {/* Project */}
           <ProjectCard
-            imageUrl={'/organiczones.png'}
-            alt={'A screenshot of organic zones home page'}
-            title={'Organic zones'}
-            projectUrl={'https://organiczones.co.ke'}
+            imageUrl={'/restaurant.png'}
+            alt={'A screenshot of a fancy restaurant website home page'}
+            title={'Restaurant'}
+            projectUrl={'https://glittery-clafoutis-7de171.netlify.app'}
           />
 
         </div>
