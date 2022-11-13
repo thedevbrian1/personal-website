@@ -108,11 +108,6 @@ function Hero() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // gsap.from("#hero", {
-      //   opacity: 0,
-      //   duration: 2,
-      //   // immediateRender: false,
-      // });
       gsap.fromTo("#arrow", {
         x: '-6',
         y: 6,
@@ -132,12 +127,12 @@ function Hero() {
   }, []);
 
   return (
-    <section ref={heroRef} className="w-full min-h-screen relative">
+    <section ref={heroRef} className="w-full md:min-h-[70vh] lg:min-h-screen relative">
       <div className="w-80 h-80 absolute -left-60 lg:-left-44 top-20 bg-brand-orange blur-3xl bg-opacity-20 rounded-full" />
-      <div className="w-full xl:max-w-7xl mx-auto grid items-start lg:place-items-center py-10 lg:py-auto">
+      <div className="w-full xl:max-w-7xl mx-auto grid items-start lg:place-items-center py-10 lg:py-auto md:mt-20 lg:mt-0">
         <motion.div
           id="hero"
-          className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 lg:mt-8 pt-44 px-6 lg:px-10"
+          className="grid lg:grid-cols-2 w-full h-full gap-14 lg:gap-5 mt-5 md:mt-8 pt-44 px-6 md:px-8 lg:px-10"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1, transition: { duration: 2 } }}
           viewport={{ once: true }}
@@ -156,22 +151,14 @@ function Hero() {
                 id="arrow"
                 src="/contact-arrow.svg"
                 alt=""
-              // initial={{ x: 0, y: 0 }}
-              // animate={{ x: -10, y: -10 }}
-              // initial={{ y: 0 }}
-              // animate={{ x: -6, y: 6 }}
-              // transition={{
-              //   duration: 1.5,
-              //   repeat: Infinity,
-              //   repeatType: 'reverse',
-              // }}
+
               />
             </div>
           </div>
-          <div>
+          <div className="flex justify-center">
             {/* Image */}
-            <div className="">
-              <img src="/hero.svg" alt="" className="object-cover w-full" />
+            <div className="md:w-96 lg:w-auto">
+              <img src="/hero.svg" alt="" className="object-cover w-full h-full" />
             </div>
           </div>
         </motion.div>
@@ -206,9 +193,9 @@ function About() {
   }, []);
 
   return (
-    <section className="w-4/5 xl:max-w-6xl mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-5 lg:mt-10" id="about">
+    <section className="w-4/5 xl:max-w-6xl mx-auto bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-5 md:mt-14 lg:mt-10" id="about">
       <div ref={aboutRef} className="grid lg:grid-cols-2 gap-8 lg:gap-36 items-center py-5 lg:py-10">
-        <div className="pl-5 lg:pl-12 pt-6">
+        <div className="px-5 md:px-8 lg:px-12 pt-6">
           <Heading text='About me' />
           <p className="text-body-white lg:text-lg mt-2 lg:mt-4">
             I am a web developer based in Nairobi, Kenya. I help my clients improve their online presence by building them fantastic websites with great SEO.
@@ -220,7 +207,7 @@ function About() {
           <p className="text-body-white lg:text-lg  mt-2">I graduated with a Bachelor's degree in Computer Science from Jomo Kenyatta University of Agriculture and Technology.</p>
         </div>
         <div className="justify-self-center">
-          <div className=" w-40 lg:w-72 xl:w-80  rounded-lg">
+          <div className=" w-40 md:w-56 lg:w-72 xl:w-80  rounded-lg">
             <svg viewBox="0 0 100 100" className="">
               <mask id="myMask">
                 <rect
@@ -262,13 +249,7 @@ function Projects() {
     <section className="w-4/5 xl:max-w-5xl mx-auto" id="projects" ref={projectsRef}>
       <div
         id="projectsDiv"
-        className="grid justify-center pt-20 lg:pt-24"
-      // style={{
-      //   opacity: isInView ? 1 : 0,
-      //   y: isInView ? 0 : 20,
-      //   transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
-      // }}
-
+        className="text-center pt-20 lg:pt-24 w-full space-y-4"
       >
         <Heading text='Wondering what I could do?' />
         <p className="text-body-white lg:text-center lg:text-lg mt-2 lg:mt-4">Here are some of my projects:</p>
@@ -278,7 +259,7 @@ function Projects() {
               Projects should display inside the frame
               Either a slider or scroll animation
           */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-5 px-3 lg:px-0 mt-5">
+        <div className="flex flex-col items-center justify-center sm:flex-row md:flex-wrap w-full gap-8 mt-2">
 
           {/* Project */}
           <ProjectCard
@@ -338,8 +319,8 @@ function ContactForm() {
       ref={contactRef}
       id="contact"
     >
-      <div id="contactDiv" className="grid lg:grid-cols-2 gap-10 lg:gap-5 px-5 lg:px-8 py-10">
-        <div className="lg:self-center">
+      <div id="contactDiv" className="grid md:grid-cols-2 gap-10 md:gap-5 px-5 md:px-8 py-10">
+        <div className="md:self-center">
           {/* Text */}
           <Heading text="Get in touch with me" />
           <p className="font-body text-body-white lg:text-lg mt-2 lg:mt-4">
@@ -381,6 +362,7 @@ function ContactForm() {
                   className="border border-brand-orange rounded-lg w-full p-2 text-body-white bg-transparent"
                 /> */}
                 <Input
+                  // ref={nameRef}
                   type='text'
                   name='name'
                   id='name'
@@ -496,12 +478,12 @@ function Footer() {
             </a>
           </div>
         </div>
-        <div className="bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-10 px-5 xl:px-8 py-10 grid lg:grid-cols-2 gap-5">
+        <div className="bg-slightly-lighter-dark-blue rounded-xl border border-slate-500 mt-10 px-5 md:px-8 py-10 grid lg:grid-cols-2 gap-5">
           <div className="lg:self-center">
             <h2 className="text-white font-heading font-bold text-xl lg:text-3xl">Sign up for the newsletter</h2>
             <p className="font-body text-body-white lg:text-lg mt-2 lg:mt-4">Receive interesting tips and articles in real time. You can unsubscribe at any time.</p>
           </div>
-          <div>
+          <div className="md:w-3/4 lg:w-auto">
             <fetcher.Form method="post">
               <fieldset className="grid gap-3">
                 <div>

@@ -24,7 +24,7 @@ export default function Nav({ navLinks }) {
                 {
                     isMenuShowing && (
                         <div className='flex flex-col justify-center items-center bg-black opacity-90 w-full h-screen fixed z-10 top-0 left-0 transition duration-500 ease-in-out'>
-                            <span className="absolute top-9 right-8">
+                            <span className="absolute top-8 right-6">
                                 <XIcon toggleMenu={toggleMenu} />
                             </span>
                             <ul className='list-none text-center mr-4 text-white'>

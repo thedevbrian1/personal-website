@@ -1,9 +1,9 @@
 export default function ProjectCard({ imageUrl, alt, title, projectUrl }) {
     return (
-        <div className="relative max-w-xs group">
+        <div className="relative w-60 lg:w-96 group">
             <div className="absolute -inset-0.5 hover:-inset-1 transition duration-1000 group-hover:duration-200 ease-in-out bg-[#c31432] blur opacity-75 group-hover:opacity-100 rounded-xl"></div>
 
-            <div className="relative max-w-xs bg-slightly-lighter-dark-blue p-2 rounded-xl">
+            <div className="relative w-full bg-slightly-lighter-dark-blue p-2 rounded-xl">
                 <div className="aspect-w-4 aspect-h-3">
                     <img
                         src={imageUrl}
@@ -13,7 +13,7 @@ export default function ProjectCard({ imageUrl, alt, title, projectUrl }) {
                         className="rounded-xl object-cover"
                     />
                 </div>
-                <div className="grid gap-2 mb-1">
+                <div className="grid gap-2 mb-1 text-left">
                     <h3 className="text-body-white font-semibold text-lg lg:text-xl ml-2 mt-3 lg:mt-6">
                         {title}
                     </h3>
