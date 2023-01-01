@@ -278,6 +278,12 @@ function Projects() {
             projectUrl={'https://glittery-clafoutis-7de171.netlify.app'}
           />
 
+          <ProjectCard
+            imageUrl={'/got.png'}
+            alt={'A screenshot of Game of Thrones quiz app home page'}
+            title={'Game of Thrones quiz app'}
+            projectUrl={'https://got-quiz-app.netlify.app/'}
+          />
         </div>
       </div>
     </section>
