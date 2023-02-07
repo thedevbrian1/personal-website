@@ -416,7 +416,7 @@ function ContactForm() {
                   id="message"
                   // cols="30" 
                   rows="4"
-                  className="w-full xl:max-w-sm bg-transparent rounded-lg block text-body-white"
+                  className="w-full xl:max-w-sm bg-transparent rounded-lg block text-body-white focus:border-none focus:ring-2 focus:ring-white"
                 />
               </div>
 
