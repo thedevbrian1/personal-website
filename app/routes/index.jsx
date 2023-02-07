@@ -286,7 +286,7 @@ function Projects() {
           />
 
           <ProjectCard
-            imageUrl={'kelectricals.png'}
+            imageUrl={'/kelectricals.png'}
             alt='A screenshot of Kihara Electricals home page'
             title='Kihara Electricals'
             projectUrl='https://kihara-electricals.netlify.app/'
