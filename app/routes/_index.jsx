@@ -1,5 +1,5 @@
 // import { Response } from "@remix-run/node";
-import { Form, Link, useActionData, useCatch, useFetcher, useTransition } from "@remix-run/react";
+import { Form, Link, isRouteErrorResponse, useActionData, useCatch, useFetcher, useRouteError, useTransition } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import { useRef, useLayoutEffect, useEffect } from "react";
 import { gsap } from "gsap";
@@ -565,17 +565,31 @@ function Footer() {
   );
 }
 
-export function CatchBoundary() {
-  const caught = useCatch();
-  return (
-    <div className="text-white w-full h-screen grid place-items-center">
-      <div className="w-4/5 mx-auto">
-        <h1 className="font-bold font-heading text-3xl lg:text-5xl">Error {caught.status}</h1>
-        <code>{JSON.stringify(caught.data, null, 2)}</code>
-        <Link to="/" className="underline text-blue-500 hover:text-blue-300 flex gap-2">
-          <ArrowLeftIcon />  Back to home
-        </Link>
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div className="text-white w-full h-screen grid place-items-center">
+        <div className="w-4/5 mx-auto">
+          <h1 className="font-bold font-heading text-3xl lg:text-5xl">Error {error.status}</h1>
+          <code>{JSON.stringify(error.data, null, 2)}</code>
+          <Link to="/" className="underline text-blue-500 hover:text-blue-300 flex gap-2">
+            <ArrowLeftIcon />  Back to home
+          </Link>
+        </div>
       </div>
-    </div>
-  )
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

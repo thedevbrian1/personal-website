@@ -18,11 +18,12 @@ export const links = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
 };
 
-export const meta = () => ({
-  charset: "utf-8",
-  title: "Brian Mwangi",
-  viewport: "width=device-width,initial-scale=1",
-});
+export const meta = () => ([
+  {
+    title: "Brian Mwangi",
+  },
+  { name: "description", content: 'Get a premium website that is modern, responsive with great SEO' }
+]);
 
 export async function loader({ request }) {
   return json({
@@ -57,6 +58,8 @@ export default function App() {
   return (
     <html lang="en" className="h-full">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
