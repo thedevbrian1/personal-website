@@ -17,7 +17,7 @@ export default function ProjectCard({ imageUrl, alt, title, projectUrl }) {
                     <h3 className="text-body-white font-semibold text-lg lg:text-xl ml-2 mt-3 lg:mt-6">
                         {title}
                     </h3>
-                    <a href={projectUrl} target="_blank" className="ml-2 text-body-white underline hover:text-brand-orange transition duration-300 ease-in-out">
+                    <a href={projectUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-body-white underline hover:text-brand-orange transition duration-300 ease-in-out">
                         View project
                     </a>
                 </div>

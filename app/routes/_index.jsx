@@ -1,16 +1,16 @@
 // import { Response } from "@remix-run/node";
-import { Form, Link, isRouteErrorResponse, useActionData, useCatch, useFetcher, useRouteError, useTransition } from "@remix-run/react";
+import { Link, isRouteErrorResponse, useFetcher, useRouteError } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import { useRef, useLayoutEffect, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Heading from "~/components/Heading";
 import { ArrowLeftIcon, Facebook, LinkedIn, Twitter } from "~/components/Icon";
 import ProjectCard from "~/components/ProjectCard";
 import Input from "~/components/Input";
 
-import { addContactToList, badRequest, createContact, sendEmail, useOptionalUser, validateEmail, validateMessage, validateName } from "~/utils";
+import { addContactToList, badRequest, createContact, sendEmail, validateEmail, validateMessage, validateName } from "~/utils";
 
 export function headers() {
   return {
@@ -21,9 +21,6 @@ export function headers() {
 export async function action({ request }) {
   const formData = await request.formData();
   const action = formData.get('_action');
-
-  const Mailjet = require('node-mailjet');
-  const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
   // const res = await mailjet.get("listrecipient", { 'version': 'v3' }).request();
   // console.log({ res });
@@ -86,7 +83,7 @@ export async function action({ request }) {
 // TODO: Responsive design (esp tab and landscape mode)
 // TODO: Fix the flash on the initial page load (probably due to SSR)
 export default function Index() {
-  const user = useOptionalUser();
+  // const user = useOptionalUser();
   return (
     <main className="relative min-h-screen font-body">
       {/* Hero section */}
@@ -443,8 +440,6 @@ function ContactForm() {
 }
 
 function Footer() {
-  const actionData = useActionData();
-  // const transition = useTransition();
   const fetcher = useFetcher();
   gsap.registerPlugin(ScrollTrigger);
 
@@ -480,13 +475,13 @@ function Footer() {
           <div className="flex gap-3">
             {/* <img src="/twitter.svg" alt="Twitter icon" />
               <img src="/facebook.svg" alt="Facebook icon" /> */}
-            <a href="https://www.linkedin.com/in/brian-mwangi-9b01651a1/" target="_blank" >
+            <a href="https://www.linkedin.com/in/brian-mwangi-9b01651a1/" target="_blank" rel="noopener noreferrer" >
               <LinkedIn />
             </a>
-            <a href="https://twitter.com/_3R14N_" target="_blank">
+            <a href="https://twitter.com/_3R14N_" target="_blank" rel="noopener noreferrer">
               <Twitter />
             </a>
-            <a href="https://www.facebook.com/brayo.notnice" target="_blank">
+            <a href="https://www.facebook.com/brayo.notnice" target="_blank" rel="noopener noreferrer">
               <Facebook />
             </a>
           </div>

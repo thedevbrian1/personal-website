@@ -4,7 +4,6 @@ import {
   Links,
   LiveReload,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
